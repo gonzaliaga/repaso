@@ -8,7 +8,7 @@ const User = require('./models/user');
 dotenv.config();
 
 //ruta protegida
-router.get('users', auth, async (req, res) => {
+router.get('users', auth, async (req, res, next) => {
     const token = req.header('x-auth-token');
     console.log('Token:', token);
     if (!token) {
