@@ -1,14 +1,10 @@
-const auth = require('./middleware/auth');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-const express = require('express');
-const router = express.Router();
-const User = require('./models/user');
+const User = require('../models/user'); // Asegúrate de que la ruta sea correcta
 
 dotenv.config();
 
-//ruta protegida
-router.get('users', auth, async (req, res, next) => {
+const auth = async (req, res, next) => {
     const token = req.header('x-auth-token');
     console.log('Token:', token);
     if (!token) {
@@ -23,12 +19,12 @@ router.get('users', auth, async (req, res, next) => {
         const users = await User.find();
         res.json(users);
 
-        next();
+        next(); // Llama a next() para pasar al siguiente middleware o ruta
+
     } catch (error) {
         console.error('error', error);
         res.status(401).json({ msg: 'Token no es válido' });
     }
+};
 
-
-});
-module.exports = router;
+module.exports = auth;
